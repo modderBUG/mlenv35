@@ -2,8 +2,12 @@
 # 反向传播和损失函数
 import tensorflow as tf
 import numpy as np
+import time
+import os
 
-BATCH_SIZE = 8
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
+BATCH_SIZE = 8  # 一次喂入神经网络多少组数据
 seed = 23455
 
 # 基于seed产生随机数
@@ -135,7 +139,7 @@ def nn03():
         print("w1:\n{}\n   w2:\n{}\n".format(sess.run(w1), sess.run(w2)))
 
         # 训练模型
-        STEPS = 3000
+        STEPS = 30000
         for i in range(STEPS):
             start = (i * BATCH_SIZE) % 32
             end = start + BATCH_SIZE
@@ -147,6 +151,14 @@ def nn03():
         print('w1 is:\n', sess.run(w1))
 
 if __name__ == '__main__':
+
+
+    time_start = time.time()  # 开始计时
+
     # nn01()
     nn02()
     # nn03()
+
+    time_end = time.time()  # 结束计时
+    time_c = time_end - time_start  # 运行所花时间
+    print('time cost', time_c, 's')

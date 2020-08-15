@@ -5,8 +5,12 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+import os
 
-BATCH_SIZE = 30
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
+BATCH_SIZE = 30  # 一次喂入多少组数据到神经网络
 seed = 2
 
 # 基于seed产生随机数
@@ -15,11 +19,11 @@ rdm = np.random.RandomState(seed)
 
 def nn01():
     # 随机数返回300行2列矩阵 表示32组 体积和重量 座位输入数据集
-    X = rdm.rand(300, 2)
+    X = rdm.randn(300, 2)
 
     # 从X这个300行2列矩阵中 取出一行 判断如果平方和小于2 给Y赋值1 否则Y=0
     # 作为输入数据集标签（正确答案）
-    Y_ = [[int(x0*x0 + x1*x1 < 2)] for (x0, x1) in X]
+    Y_ = [int(x0*x0 + x1*x1 < 2) for (x0, x1) in X]
 
     # 遍历Y中的背个元素 1渎职 red 其余赋值 blue 这样可视化显示 人可以直观区分
     Y_c = [['red' if y else 'blue'] for y in Y_]
@@ -50,7 +54,7 @@ def nn01():
     x= tf.placeholder(tf.float32,shape=(None,2))
     y_= tf.placeholder(tf.float32,shape=(None,1))
 
-    w1 = get_weight([2,1],0.01)
+    w1 = get_weight([2,11],0.01)
     b1 = get_bias([11])
     y1 = tf.nn.relu(tf.matmul(x,w1)+b1)
 
@@ -60,7 +64,7 @@ def nn01():
 
     # 定义损失函数
     loss_mse = tf.reduce_mean(tf.square(y-y_))
-    loss_totle = loss_mse +tf.add_n(tf.get_collection('losses'))
+    loss_total = loss_mse + tf.add_n(tf.get_collection('losses'))
 
     # 定义反向传播方法 ： 不含正则化
     train_step = tf.train.AdamOptimizer(0.0001).minimize(loss_mse)
@@ -71,11 +75,12 @@ def nn01():
         STEPS = 40000
         for i in range(STEPS):
             start = (i*BATCH_SIZE) % 300
-            end = start +BATCH_SIZE
+            end = start + BATCH_SIZE
             sess.run(train_step,feed_dict={x:X[start:end],y_:Y_[start:end]})
             if i % 2000 ==0:
                 loss_mse_v = sess.run(loss_mse,feed_dict={x:X,y_:Y_})
                 print("第{}步，loss是：{}\n".format(i, loss_mse_v))
+
 
         # xx在-3到3之间以步长位0.01,yy在-3到3之间以步长0.01，生成二维网络坐标点
         xx,yy = np.mgrid[-3:3:0.01,-3:3:0.01]
@@ -98,7 +103,7 @@ def nn01():
     plt.show()
 
     # 定义反向传播方法 包含正则化
-    train_step = tf.train.AdamOptimizer(0.0001).minimize(loss_totle)
+    train_step = tf.train.AdamOptimizer(0.0001).minimize(loss_total)
     with tf.Session() as sess:
         init_op = tf.global_variables_initializer()
         sess.run(init_op)
@@ -130,5 +135,14 @@ def nn01():
     plt.contour(xx,yy,probs,levels=[.5])
     plt.show()
 
+
+
+
 if __name__ == '__main__':
+    time_start = time.time()  # 开始计时
+
     nn01()
+
+    time_end = time.time()  # 结束计时
+    time_c = time_end - time_start  # 运行所花时间
+    print('time cost', time_c, 's')
