@@ -126,7 +126,9 @@ def nn01():
         print("\nb1:\n", sess.run(b1))
         print("\nw2:\n", sess.run(w2))
         print("\nb2:\n", sess.run(b2))
-
+    plt.scatter(X[:,0],X[:,1],c=np.squeeze(Y_c))
+    plt.contour(xx,yy,probs,levels=[.5])
+    plt.show()
 
 if __name__ == '__main__':
     nn01()
