@@ -100,7 +100,9 @@ def backward2():
                 plt.pause(0.1)
 
         showPlot(sess, y, x, X, Y_c)
-        plt.show()
+    plt.ioff()       # 关闭画图的窗口，即关闭交互模式
+    plt.show()       # 显示图片，防止闪退
+
 
 def showPlot(sess,y,x,X,Y_c):
     # xx在-3到3之间以步长位0.01,yy在-3到3之间以步长0.01，生成二维网络坐标点
