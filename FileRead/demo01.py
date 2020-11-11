@@ -13,7 +13,11 @@ def picture_read(file_list):
 
     # 2.读取与解码
     # 读取阶段
-    reader = tf.WholeFileReader()
+    # reader = tf.TextLineReader()   # CSV文件或分割符
+    reader = tf.WholeFileReader()  # 读取图片
+    # reader = tf.FixedLengthRecordReader(record_bytes)  # 二进制
+    # reader = tf.TFRecordReader()  # tfRecords
+
     # key 文件名,value 编码形式
     key,value = reader.read(file_queue)
     print("{'{0}':'{1}'}".format(key,value))
@@ -21,6 +25,11 @@ def picture_read(file_list):
     #解码阶段
     image = tf.image.decode_jpeg(value)
     print('image:\n',image)
+
+    # image = tf.decode_csv() # 解码文本
+    # image = tf.image.decode_jpeg(value)
+    # image = tf.image.decode_png(value)
+    # image = tf.decode_raw() # 解码二进制
 
     # 图片形状、类型修改
     image_resized = tf.image.resize_images(image,[200,200])
@@ -33,6 +42,8 @@ def picture_read(file_list):
     # 3.批处理
     image_batch = tf.train.batch([image_resized],batch_size=100,num_threads=1,capacity=100)
     print("image_batch:\n",image_batch)
+
+
 
     # 开启会话
     with tf.Session() as sess:

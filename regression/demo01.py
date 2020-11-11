@@ -36,6 +36,8 @@ def linear_regrssion():
             sess.run(optimizer)
             print("{}--{}---{}".format(weight.eval(),bias.eval(),error.eval()))
 
+        tf.summary.FileWriter("./tmp/summary",graph=sess.graph)
+
     return None
 
 

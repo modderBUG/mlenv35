@@ -6,3 +6,5 @@
 /regression/temp/
 /MOOC/CNN/mnist_lenet5/data/
 /MOOC/CNN/mnist_lenet5/model/
+/MOOC/CNN/vgg16/npy/
+/MOOC/CNN/vgg16/pic/
