@@ -162,7 +162,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(lr=learning_rate),
               # loss = tf.keras.losses.mean_squared_error(),
               metrics=['categorical_accuracy'])
 # 模型保存
-checkpoint_path = "./ckpt/cnn_model/cnn_model.ckpt"  # 路径需要调整
+checkpoint_path = "./ckpt/cnn_model_new/cnn_model.ckpt"  # 路径需要调整
 if os.path.exists(checkpoint_path + '.index'):
     print("load the model")
     model.load_weights(checkpoint_path)
@@ -170,7 +170,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  save_weights_only=True,
                                                  save_best_only=True)
 # 喂入数据
-history = model.fit(x_train, y_train, batch_size=64, epochs=1,
+history = model.fit(x_train, y_train, batch_size=64, epochs=10,
                     validation_data=(x_test, y_test),
                     validation_freq=1,
                     callbacks=[cp_callback])
@@ -179,8 +179,8 @@ history = model.fit(x_train, y_train, batch_size=64, epochs=1,
 model.summary()
 
 
-tf.saved_model.save()
-tf.saved_model.load
+# tf.saved_model.save()
+# tf.saved_model.load
 
 # -------------绘制误差图像-----------------------------
 acc = history.history['categorical_accuracy']

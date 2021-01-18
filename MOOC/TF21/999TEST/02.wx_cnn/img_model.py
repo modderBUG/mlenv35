@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Dense,GlobalAveragePooling2D,Dropout,GlobalMaxPooling2D
+from tensorflow.keras.layers import Dense,GlobalAveragePooling2D,Dropout,GlobalMaxPooling2D,BatchNormalization
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input,MobileNetV2

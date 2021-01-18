@@ -1,8 +1,25 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras import Model
+import pandas as pd
 from PIL import Image
 import numpy as np
+
+# 自定义
+
+def read_data_v(data_dir):
+    data1 = pd.read_excel(data_dir, header=None)
+    print("****************************")
+    X1 = np.array(data1.loc[0:3999, 0:3])
+    label = data1.loc[0:3999, 4]
+    Y1 = []
+    for i in label:
+        temp = [0, 0, 0, 0, 0]
+        temp[i] = 1
+        Y1.append(temp)
+    Y1 = np.array(Y1)
+    return X1, Y1
+
 
 """
 用于预测sync模型的app，输入预测值，输出预测结果
@@ -39,15 +56,22 @@ model = SyncModel()
 # 加载模型
 model.load_weights(checkpoint_path)
 
-
+test_x, test_y = read_data_v(
+    r'C:\Users\wuxiaowei_a\PycharmProjects\mlenv35\MOOC\TF21\999TEST\0.xinan_sync\my_datasets\val.xlsx')
 
 # 输入预测数据
-img_arr = np.array([[4, 0.01, 1, 1], [2, 0.19, 0, 5], [3, 0.17, 1, 0]])  # 1,2,0
+img_arr = np.array([[3, 0.4, 0, 3], [3, 0.2, 1, 1], [2, 0.9, 1, 5], [4, 0.01, 1, 1], [2, 0.19, 0, 5], [3, 0.4, 0, 3]])  # 1,2,0
 x_predict = img_arr
 
+import time
+start_time = time.time()
 # 预测
-result = model.predict(x_predict)
 
+result = model.predict(x_predict)
+# result2 = model.predict(np.array(test_x))
+
+end_time = time.time()
+print(end_time-start_time)
 result = tf.argmax(result,1)
 
 print('\n')
